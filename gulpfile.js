@@ -4,8 +4,12 @@ var clean = require('gulp-clean');
 var concat = require('gulp-concat');
 var htmlReplace = require('gulp-html-replace');
 var terser = require('gulp-terser');
-var usemin = require('gulp-usemin')
-var cssmin = require('gulp-cssmin')
+var usemin = require('gulp-usemin');
+var cssmin = require('gulp-cssmin');
+var browserSync = require('browser-sync').create();
+var jshint = require('gulp-jshint');
+var jshintStylish = require('jshint-stylish');
+var csslint = require('gulp-csslint');
 
 gulp.task('default', ['copy'], function () {
   /* as 3 funções abaixo não tem retorno, então elas são executadas assincronamente */
@@ -40,4 +44,25 @@ gulp.task('usemin', function() {
     'css': [cssmin]
   }))
   .pipe(gulp.dest('dist'))
+})
+
+gulp.task('server', function () {
+  browserSync.init({
+    server: {
+      baseDir: 'src'
+    }
+  });
+  //trata erros de js
+  gulp.watch('src/js/*.js').on('change', function(event) {
+    gulp.src(event.path)
+    .pipe(jshint())
+    .pipe(jshint.reporter(jshintStylish))
+  });
+  //trata erros de css
+  gulp.watch('src/style/*.css').on('change', function(event) {
+    gulp.src(event.path)
+    .pipe(csslint())
+    .pipe(csslint.reporter())
+  });
+  gulp.watch('src/**/*').on('change', browserSync.reload);
 })
