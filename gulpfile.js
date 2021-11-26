@@ -42,7 +42,7 @@ gulp.task('usemin', function() {
  gulp.src('dist/**/*.html')
   .pipe(usemin({
     'js': [terser],
-    'css': [autoprefixer, cssmin]
+    'css': [autoprefixer({browsers: ['last 40 versions']}), cssmin]
   }))
   .pipe(gulp.dest('dist'))
 })
