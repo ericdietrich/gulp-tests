@@ -10,6 +10,7 @@ var browserSync = require('browser-sync').create();
 var jshint = require('gulp-jshint');
 var jshintStylish = require('jshint-stylish');
 var csslint = require('gulp-csslint');
+var autoprefixer = require('gulp-autoprefixer');
 
 gulp.task('default', ['copy'], function () {
   /* as 3 funções abaixo não tem retorno, então elas são executadas assincronamente */
@@ -41,7 +42,7 @@ gulp.task('usemin', function() {
  gulp.src('dist/**/*.html')
   .pipe(usemin({
     'js': [terser],
-    'css': [cssmin]
+    'css': [autoprefixer, cssmin]
   }))
   .pipe(gulp.dest('dist'))
 })
