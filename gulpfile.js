@@ -11,6 +11,7 @@ var jshint = require('gulp-jshint');
 var jshintStylish = require('jshint-stylish');
 var csslint = require('gulp-csslint');
 var autoprefixer = require('gulp-autoprefixer');
+var less = require('gulp-less');
 
 gulp.task('default', ['copy'], function () {
   /* as 3 funções abaixo não tem retorno, então elas são executadas assincronamente */
@@ -58,6 +59,16 @@ gulp.task('server', function () {
     gulp.src(event.path)
     .pipe(jshint())
     .pipe(jshint.reporter(jshintStylish))
+  });
+  //compila less
+  gulp.watch('src/less/*.less').on('change', function(event) {
+    console.log('Compilando arquivo: ' + event.path)
+    gulp.src(event.path)
+    .pipe(less().on('error', function(error) {
+      console.log('Problema na compilação');
+      console.log(error.message);
+    }))
+    .pipe(gulp.dest('src/style'))
   });
   //trata erros de css
   gulp.watch('src/style/*.css').on('change', function(event) {
